@@ -4,6 +4,7 @@ import { Button, Card } from "@heroui/react";
 import React from "react";
 import { toast } from "react-toastify";
 import { authClient } from "@/lib/auth-client";
+import AuthRedirect from "@/app/components/AuthRedirect";
 
 const SignInPage = () => {
   const formSubmit = async (e) => {
@@ -45,7 +46,8 @@ const SignInPage = () => {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-20">
+    <AuthRedirect>
+      <main className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-20">
       <Card className="w-full max-w-md rounded-3xl border border-gray-200 bg-white p-8 shadow-xl">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-900">
@@ -105,6 +107,7 @@ const SignInPage = () => {
         </p>
       </Card>
     </main>
+    </AuthRedirect>
   );
 };
 
