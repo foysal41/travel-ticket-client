@@ -40,7 +40,7 @@ const AddTicket = () => {
 
     }
   return (
-    <main className="min-h-screen bg-gray-50 px-4 py-8">
+    <main className="min-h-screen  px-4 py-8">
       <div className="">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">

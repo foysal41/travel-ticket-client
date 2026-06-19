@@ -1,58 +1,11 @@
-"use client";
-
 import React from "react";
 import { Button, Card } from "@heroui/react";
 import Link from "next/link";
+import { getTickets } from "@/app/lib/api/gettickets";
 
-const MyAddedTicketsTable = () => {
-  const tickets = [
-    {
-      id: 1,
-      image: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957",
-      title: "Dhaka to Cox's Bazar",
-      ticketId: "TK1001",
-      from: "Dhaka",
-      to: "Cox's Bazar",
-      transportType: "Bus",
-      price: 1200,
-      quantity: 30,
-      departure: "20 Jul 2025",
-      time: "08:00 AM",
-      perks: ["AC", "WiFi"],
-      status: "pending",
-    },
-    {
-      id: 2,
-      image: "https://images.unsplash.com/photo-1474487548417-781cb71495f3",
-      title: "Dhaka to Sylhet",
-      ticketId: "TK1002",
-      from: "Dhaka",
-      to: "Sylhet",
-      transportType: "Train",
-      price: 800,
-      quantity: 50,
-      departure: "22 Jul 2025",
-      time: "07:30 AM",
-      perks: ["AC", "Breakfast"],
-      status: "approved",
-    },
-    {
-      id: 3,
-      image: "https://images.unsplash.com/photo-1600679472829-3044539ce8ed",
-      title: "Dhaka to Barishal",
-      ticketId: "TK1003",
-      from: "Dhaka",
-      to: "Barishal",
-      transportType: "Launch",
-      price: 600,
-      quantity: 40,
-      departure: "25 Jul 2025",
-      time: "09:00 AM",
-      perks: ["Cabin", "Food"],
-      status: "rejected",
-    },
-  ];
-
+const MyAddedTicketsTable = async () => {
+  const tickets = await getTickets();
+ 
   const statusClass = {
     pending: "bg-yellow-100 text-yellow-700",
     approved: "bg-green-100 text-green-700",
@@ -60,21 +13,17 @@ const MyAddedTicketsTable = () => {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 px-4 py-8">
+    <main className="min-h-screen  px-4 py-8">
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">
-            My Added Tickets
-          </h1>
+          <h1 className="text-3xl font-bold text-gray-900">My Added Tickets</h1>
           <p className="mt-2 text-sm text-gray-500">
             All the tickets you have added are listed below.
           </p>
         </div>
 
         <Button className="rounded-xl bg-blue-600 px-6 text-white">
-          <Link href={'/dashboard/vendor/add-ticket'}>
-          Add New Ticket
-          </Link>
+          <Link href={"/dashboard/vendor/add-ticket"}>Add New Ticket</Link>
         </Button>
       </div>
 
@@ -142,7 +91,7 @@ const MyAddedTicketsTable = () => {
                         {ticket.title}
                       </h3>
                       <p className="mt-1 text-xs text-gray-500">
-                        ID: {ticket.ticketId}
+                        ID: {ticket._id}
                       </p>
                     </td>
 
@@ -158,37 +107,39 @@ const MyAddedTicketsTable = () => {
                       </span>
                     </td>
 
-                    <td className="px-4 py-4 font-medium">
-                      ৳ {ticket.price}
-                    </td>
+                    <td className="px-4 py-4 font-medium">৳ {ticket.price}</td>
+
+                    <td className="px-4 py-4">{ticket.quantity} Seats</td>
 
                     <td className="px-4 py-4">
-                      {ticket.quantity} Seats
-                    </td>
-
-                    <td className="px-4 py-4">
-                      <p>{ticket.departure}</p>
-                      <p>{ticket.time}</p>
+                      <p>{ticket.departureDateTime?.split("T")[0]}</p>
+                      <p>{ticket.departureDateTime?.split("T")[1]}</p>
                     </td>
 
                     <td className="px-4 py-4">
                       <div className="flex flex-wrap gap-2">
-                        {ticket.perks.map((perk) => (
-                          <span
-                            key={perk}
-                            className="rounded-lg bg-blue-100 px-3 py-1 text-xs font-medium text-blue-700"
-                          >
-                            {perk}
+                        {Array.isArray(ticket.perks) ? (
+                          ticket.perks.map((perk, index) => (
+                            <span
+                              key={index}
+                              className="rounded-lg bg-blue-100 px-3 py-1 text-xs font-medium text-blue-700"
+                            >
+                              {perk}
+                            </span>
+                          ))
+                        ) : (
+                          <span className="rounded-lg bg-blue-100 px-3 py-1 text-xs font-medium text-blue-700">
+                            {ticket.perks || "No Perks"}
                           </span>
-                        ))}
+                        )}
                       </div>
                     </td>
 
                     <td className="px-4 py-4">
                       <span
-                        className={`rounded-full px-3 py-1 text-xs font-semibold ${statusClass[ticket.status]}`}
+                        className={`rounded-full px-3 py-1 text-xs font-semibold ${statusClass[ticket.verificationStatus]}`}
                       >
-                        {ticket.status}
+                        {ticket.verificationStatus}
                       </span>
                     </td>
 

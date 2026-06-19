@@ -58,7 +58,7 @@ const VendorDashboardPage = () => {
 
    
   return (
-    <div className='px-5 '>
+    <div className='px-4 py-8 '>
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-slate-950 md:text-3xl">
@@ -67,11 +67,6 @@ const VendorDashboardPage = () => {
           <p className="mt-2 text-sm text-slate-500">{`Here's what's happening with your ticket business today.`}</p>
         </div>
 
-        {/* {dateRange && (
-          <div className="inline-flex w-fit items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm">
-            📅 {dateRange}
-          </div>
-        )} */}
       </div>
 
         <StateCard stats={stats}></StateCard>
