@@ -1,7 +1,9 @@
 'use client'
+
 import { createTicket } from "@/app/lib/actions/createTicket";
 import { useSession } from "@/lib/auth-client";
 import { Button, Card } from "@heroui/react";
+import { redirect } from "next/navigation";
 import React from "react";
 import { toast } from "react-toastify";
 
@@ -32,6 +34,7 @@ const AddTicket = () => {
         if(res.insertedId){
             toast.success("Ticket Create Successfull!")
             e.target.reset();
+            redirect("/dashboard/vendor")
 
         }
 
