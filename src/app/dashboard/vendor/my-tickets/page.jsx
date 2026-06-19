@@ -50,7 +50,7 @@ const MyAddedTicketsTable = async () => {
         </div>
 
         <div className="overflow-x-auto rounded-2xl border border-gray-200">
-          <table className="w-full min-w-[1100px] border-collapse text-left">
+          <table className="w-full min-w-275 border-collapse text-left">
             <thead className="bg-blue-50">
               <tr className="text-sm text-gray-700">
                 <th className="px-4 py-4 font-semibold">#</th>
@@ -87,7 +87,7 @@ const MyAddedTicketsTable = async () => {
                     </td>
 
                     <td className="px-4 py-4">
-                      <h3 className="max-w-[160px] font-semibold text-gray-900">
+                      <h3 className="max-w-40 font-semibold text-gray-900">
                         {ticket.title}
                       </h3>
                       <p className="mt-1 text-xs text-gray-500">

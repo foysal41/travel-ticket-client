@@ -6,7 +6,7 @@ const HeroSection = () => {
     <section className="relative ">
       {/* Hero Banner */}
       <div
-        className="h-[420px] bg-cover bg-center relative"
+        className="h-105 bg-cover bg-center relative"
         style={{
           backgroundImage: `url(${heroBg.src})`,
         }}

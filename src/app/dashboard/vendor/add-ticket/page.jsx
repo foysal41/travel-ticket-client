@@ -1,51 +1,102 @@
-'use client'
+"use client";
 
 import { createTicket } from "@/app/lib/actions/createTicket";
 import { useSession } from "@/lib/auth-client";
 import { Button, Card } from "@heroui/react";
+import Image from "next/image";
 import { redirect } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
 
 const AddTicket = () => {
+  const [logoUrl, setLogoUrl] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
 
-    const {data:session} = useSession()
-    const user = session?.user
+  const { data: session } = useSession();
+  const user = session?.user;
 
+  const handleLogoUpload = async (e) => {
+    const file = e.target.files[0];
+    // console.log("DEBUG 1 - Selected file:", file);
 
-    const formSubmit = async(e) => {
-        e.preventDefault();
-
-        const formData = new FormData(e.currentTarget);
-        const ticket = Object.fromEntries(formData.entries());
-        // console.log(user)
-
-        // Form Validation
-        if(!ticket.title || !ticket.from || !ticket.to || !ticket.transportType || !ticket.price || !ticket.quantity || !ticket.departureDateTime  ){
-            toast.error("Please fill in all fields")
-            return;
-        }
-
-        const payload = {
-            ...ticket,           
-            verificationStatus: "pending"
-        }
-        const res = await createTicket(payload)
-        if(res.insertedId){
-            toast.success("Ticket Create Successfull!")
-            e.target.reset();
-            redirect("/dashboard/vendor")
-
-        }
-
+    if(!file){
+        toast.error("please upload Ticket Image")
+        return;
     }
+    if(file.size > 2 * 1024 * 1024){
+        toast.error("Image size must be less than 2MB");
+        // console.log("DEBUG 2 - File too large:", file.size);
+        return;
+    }
+
+    setIsUploading(true);
+    const imageData = new FormData();
+    imageData.append("image", file)
+
+    try{
+        const imageUploadKey = process.env.NEXT_PUBLIC_IMAGE_UPLOAD_API;
+        // console.log("DEBUG 3 - ImgBB key exists:", !!imageUploadKey);
+
+        const res = await fetch( `https://api.imgbb.com/1/upload?key=${imageUploadKey}`,{
+            method: "POST",
+            body: imageData,
+        })
+        const data = await res.json();
+        //  console.log("DEBUG 4 - ImgBB response:", data);
+
+        if(data.success){
+            setLogoUrl(data.data.url)
+            toast.success("Image uploaded successfully");
+        }else{
+             toast.error("Image upload failed");
+        }
+
+    }catch(error){
+        toast.error("Image upload error from server");
+    }finally{
+        setIsUploading(false)
+    }
+  
+  };
+
+  const formSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+    const ticket = Object.fromEntries(formData.entries());
+    // console.log(user)
+
+    // Form Validation
+    if (
+      !ticket.title ||
+      !ticket.from ||
+      !ticket.to ||
+      !ticket.transportType ||
+      !ticket.price ||
+      !ticket.quantity ||
+      !ticket.departureDateTime
+    ) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    const payload = {
+      ...ticket,
+      image: logoUrl,
+      verificationStatus: "pending",
+    };
+    const res = await createTicket(payload);
+    if (res.insertedId) {
+      toast.success("Ticket Create Successfull!");
+      e.target.reset();
+      redirect("/dashboard/vendor");
+    }
+  };
   return (
     <main className="min-h-screen  px-4 py-8">
       <div className="">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Add New Ticket
-          </h1>
+          <h1 className="text-3xl font-bold text-gray-900">Add New Ticket</h1>
           <p className="mt-2 text-sm text-gray-500">
             Fill in the details below to add a new travel ticket.
           </p>
@@ -160,22 +211,27 @@ const AddTicket = () => {
               </h2>
 
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                {["AC", "Breakfast", "WiFi", "Charging Port", "Window Seat", "Water Bottle"].map(
-                  (perk) => (
-                    <label
-                      key={perk}
-                      className="flex h-14 cursor-pointer items-center justify-between rounded-xl border border-gray-300 bg-white px-4 text-sm font-medium text-gray-700 transition hover:border-blue-500 hover:bg-blue-50"
-                    >
-                      <span>{perk}</span>
-                      <input
-                        type="checkbox"
-                        name="perks"
-                        value={perk}
-                        className="h-4 w-4 accent-blue-600"
-                      />
-                    </label>
-                  )
-                )}
+                {[
+                  "AC",
+                  "Breakfast",
+                  "WiFi",
+                  "Charging Port",
+                  "Window Seat",
+                  "Water Bottle",
+                ].map((perk) => (
+                  <label
+                    key={perk}
+                    className="flex h-14 cursor-pointer items-center justify-between rounded-xl border border-gray-300 bg-white px-4 text-sm font-medium text-gray-700 transition hover:border-blue-500 hover:bg-blue-50"
+                  >
+                    <span>{perk}</span>
+                    <input
+                      type="checkbox"
+                      name="perks"
+                      value={perk}
+                      className="h-4 w-4 accent-blue-600"
+                    />
+                  </label>
+                ))}
               </div>
 
               <p className="mt-5 text-sm text-gray-500">
@@ -190,20 +246,44 @@ const AddTicket = () => {
             </h2>
 
             <label className="flex min-h-48 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-blue-300 bg-blue-50/40 px-6 py-10 text-center transition hover:bg-blue-50">
-              <input name="image" type="file" accept="image/*" className="hidden" />
+              <input
+                name="image"
+                type="file"
+                accept="image/*"
+                onChange={handleLogoUpload}
+                disabled={isUploading}
+                className="hidden"
+              />
 
-              <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-blue-100 text-2xl text-blue-600">
-                ↑
-              </div>
+           
 
+              {/* Preview Image */}
+              {logoUrl && (
+                <Image
+                  src={logoUrl}
+                  alt="Ticket Preview"
+                  className="mb-4 h-36 w-60 rounded-xl object-cover shadow"
+                 width={240}  height={144}
+                 
+                />
+              )}
+            
+
+              {/* Upload Status */}
               <p className="font-semibold text-gray-900">
-                Drag & drop image here
+                {isUploading
+                  ? "Uploading image..."
+                  : logoUrl
+                    ? "Image Uploaded Successfully"
+                    : "Drag & drop image here"}
               </p>
+
               <p className="mt-1 text-sm text-blue-600">
-                or click to browse
+                {logoUrl ? "Click to change image" : "or click to browse"}
               </p>
+
               <p className="mt-2 text-xs text-gray-500">
-                PNG, JPG or WEBP allowed
+                PNG, JPG or WEBP allowed (Max 5MB)
               </p>
             </label>
           </Card>
@@ -251,7 +331,7 @@ const AddTicket = () => {
         </form>
       </div>
     </main>
-  )
-}
+  );
+};
 
-export default AddTicket
+export default AddTicket;
