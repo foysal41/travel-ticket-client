@@ -1,4 +1,5 @@
 'use client'
+import { createTicket } from "@/app/lib/actions/createTicket";
 import { useSession } from "@/lib/auth-client";
 import { Button, Card } from "@heroui/react";
 import React from "react";
@@ -18,8 +19,20 @@ const AddTicket = () => {
         // console.log(user)
 
         // Form Validation
-        if(!ticket.title || !ticket.from | !ticket.to || !ticket.transportType || !ticket.price || !ticket.quantity || !ticket.departureDateTime || !ticket.perks ){
+        if(!ticket.title || !ticket.from || !ticket.to || !ticket.transportType || !ticket.price || !ticket.quantity || !ticket.departureDateTime  ){
             toast.error("Please fill in all fields")
+            return;
+        }
+
+        const payload = {
+            ...ticket,           
+            verificationStatus: "pending"
+        }
+        const res = await createTicket(payload)
+        if(res.insertedId){
+            toast.success("Ticket Create Successfull!")
+            e.target.reset();
+
         }
 
     }
