@@ -1,25 +1,38 @@
-import {LayoutSideContentLeft, Bell, Envelope, Gear, House, Magnifier, Person} from "@gravity-ui/icons";
+import {
+  LayoutSideContentLeft,
+  Calendar,
+  ChartColumn,
+  Gear,
+  House,
+  Person,
+  Ticket,
+  Plus,
+
+} from "@gravity-ui/icons";
 import {Button, Drawer} from "@heroui/react";
+import { ClipboardListIcon } from "lucide-react";
 
 export function DashboardSidebar() {
   const navItems = [
-    {icon: House, label: "Home"},
-    {icon: Magnifier, label: "Search"},
-    {icon: Bell, label: "Notifications"},
-    {icon: Envelope, label: "Messages"},
-    {icon: Person, label: "Profile"},
-    {icon: Gear, label: "Settings"},
+    { icon: House, label: "Dashboard", active: true },
+    { icon: Plus, label: "Add Ticket" },
+    { icon: Ticket, label: "My Added Tickets" },
+    { icon: ClipboardListIcon, label: "Requested Bookings" },
+    { icon: ChartColumn, label: "Earnings" },
+    { icon: Person, label: "Vendor Profile" },
+    { icon: Gear, label: "Settings" },
   ];
 
 
-  const navContent =  <nav className="flex flex-col gap-1">
+  const navContent =  <nav className="flex flex-col gap-3">
                 {navItems.map((item) => (
                   <button
-                    key={item.label}
-                    className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-foreground transition-colors hover:bg-default"
+                    key={item.label} 
+                    className= {`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-all ${item.active ? "bg-[#0B3977] text-white shadow-lg shadow-blue-200" : "text-gray-700 hover:bg-blue-50 hover:text-blue-600"}`}
                     type="button"
                   >
-                    <item.icon className="size-5 text-muted" />
+                    
+                    <item.icon className={`${item.active ? "text-white " : "text-muted"}`}/>
                     {item.label}
                   </button>
                 ))}

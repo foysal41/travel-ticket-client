@@ -3,7 +3,7 @@ import { DashboardSidebar } from '../components/dashboard/DashboardSidebar'
 
 const DashboardLayout = ({children}) => {
   return (
-    <div  className='flex min-h-screen'>
+    <div  className='flex min-h-screen py-5 '>
         <DashboardSidebar></DashboardSidebar>
         <div className='flex-1'>{children}</div>
     </div>
