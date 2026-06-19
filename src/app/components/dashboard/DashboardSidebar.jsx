@@ -42,7 +42,7 @@ export function DashboardSidebar() {
     },
     {
       icon: Person,
-      href: "/dashboard/vendor/profile",
+      href: "/dashboard/vendor/vendor-profile",
       label: "Vendor Profile",
     },
     { icon: Gear, href: "/dashboard/vendor/settings", label: "Settings" },
