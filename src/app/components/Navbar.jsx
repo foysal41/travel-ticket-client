@@ -12,6 +12,7 @@ const Navbar = () => {
   const { data: session, isPending } = useSession();
   const user = session?.user;
 
+
   const navLinks = [
     { label: "Home", href: "/" },
     { label: "All Tickets", href: "/tickets" },
@@ -71,7 +72,7 @@ const Navbar = () => {
                   </div>
 
                   <span className="text-sm font-medium text-gray-800">
-                    {user.name}
+                    Hi, {user.name}
                   </span>
 
                   <span className="text-xs text-gray-500">▼</span>
@@ -153,7 +154,7 @@ const Navbar = () => {
               <>
                 <li className="rounded-xl bg-gray-50 px-4 py-3">
                   <p className="text-sm font-semibold text-gray-800">
-                    {user.name}
+                    HI, {user.name}
                   </p>
                   <p className="text-xs text-gray-500">{user.email}</p>
                 </li>
