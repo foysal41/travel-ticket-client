@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button, Card } from "@heroui/react";
 import { getTickets } from "@/app/lib/api/gettickets";
+import CountdownTimer from "@/app/components/CountdownTimer";
 
 const TicketDetailsPage = async ({ params }) => {
   const { id } = await params;
@@ -39,6 +40,7 @@ const TicketDetailsPage = async ({ params }) => {
             <div className="p-6">
               <h1 className="text-3xl font-bold text-gray-900">
                 {myticket.title}
+                
               </h1>
 
               <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-4">
@@ -152,26 +154,11 @@ const TicketDetailsPage = async ({ params }) => {
             </div>
 
             <div className="mt-6 rounded-2xl bg-blue-50 p-5">
-              <h3 className="font-semibold text-blue-700">Departure In</h3>
+             
 
-              <div className="mt-4 grid grid-cols-4 gap-3 text-center">
-                <div className="rounded-xl bg-white p-3">
-                  <p className="text-2xl font-bold text-blue-600">02</p>
-                  <p className="text-xs text-gray-500">Days</p>
-                </div>
-                <div className="rounded-xl bg-white p-3">
-                  <p className="text-2xl font-bold text-blue-600">14</p>
-                  <p className="text-xs text-gray-500">Hours</p>
-                </div>
-                <div className="rounded-xl bg-white p-3">
-                  <p className="text-2xl font-bold text-blue-600">35</p>
-                  <p className="text-xs text-gray-500">Min</p>
-                </div>
-                <div className="rounded-xl bg-white p-3">
-                  <p className="text-2xl font-bold text-blue-600">40</p>
-                  <p className="text-xs text-gray-500">Sec</p>
-                </div>
-              </div>
+
+                <CountdownTimer departureDateTime={myticket.departureDateTime} ></CountdownTimer>
+       
             </div>
 
             <div className="mt-6 rounded-2xl bg-green-50 p-5">
