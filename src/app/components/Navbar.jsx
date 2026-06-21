@@ -15,7 +15,7 @@ const Navbar = () => {
 
   const navLinks = [
     { label: "Home", href: "/" },
-    { label: "All Tickets", href: "/tickets" },
+    { label: "All Tickets", href: "/all-tickets" },
   ];
 
   const dashboardLinks = {
