@@ -2,19 +2,19 @@
 
 import React, { useState } from "react";
 import { Button } from "@heroui/react";
-import { bookedTicket } from "../lib/actions/bookedTicket";
 import { toast } from "react-toastify";
 
 const BookNowModal = ({ ticket }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [bookingQuantity, setBookingQuantity] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
   const price = Number(ticket.price);
   const availableQuantity = Number(ticket.quantity);
   const totalPrice = price * Number(bookingQuantity);
 
   const isInvalidQuantity =
-    bookingQuantity < 1 || bookingQuantity > availableQuantity;
+    Number(bookingQuantity) < 1 || Number(bookingQuantity) > availableQuantity;
 
   const isDeparturePassed =
     new Date(ticket.departureDateTime).getTime() < new Date().getTime();
@@ -22,7 +22,12 @@ const BookNowModal = ({ ticket }) => {
   const isSoldOut = availableQuantity === 0;
 
   const handleConfirmBooking = async () => {
-    if (isInvalidQuantity) return;
+    if (isInvalidQuantity) {
+      toast.error("Invalid ticket quantity");
+      return;
+    }
+
+    setIsLoading(true);
 
     const bookingData = {
       ticketId: ticket._id,
@@ -40,14 +45,22 @@ const BookNowModal = ({ ticket }) => {
       departureDateTime: ticket.departureDateTime,
     };
 
-    const res =  await bookedTicket(bookingData);
-    if(res.insertedId){
-      toast.success("Booking Request Sent!")
+    const res = await fetch("/api/checkout_sessions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(bookingData),
+    });
+
+    const data = await res.json();
+
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      toast.error(data.error || "Stripe checkout failed");
+      setIsLoading(false);
     }
-
-    // console.log("Booking Data:", bookingData);
-
-    setIsOpen(false);
   };
 
   return (
@@ -68,7 +81,7 @@ const BookNowModal = ({ ticket }) => {
             </h2>
 
             <p className="mt-2 text-sm text-gray-500">
-              Enter your desired ticket quantity.
+              Select quantity and continue to payment.
             </p>
 
             <div className="mt-6 space-y-4">
@@ -128,6 +141,7 @@ const BookNowModal = ({ ticket }) => {
 
             <div className="mt-6 flex justify-end gap-3">
               <Button
+                disabled={isLoading}
                 onPress={() => setIsOpen(false)}
                 className="rounded-xl border border-gray-300 bg-white px-5 text-gray-700"
               >
@@ -135,11 +149,11 @@ const BookNowModal = ({ ticket }) => {
               </Button>
 
               <Button
-                disabled={isInvalidQuantity}
+                disabled={isInvalidQuantity || isLoading}
                 onPress={handleConfirmBooking}
                 className="rounded-xl bg-blue-600 px-6 text-white hover:bg-blue-700 disabled:bg-gray-300"
               >
-                Confirm
+                {isLoading ? "Redirecting..." : "Pay Now"}
               </Button>
             </div>
           </div>
