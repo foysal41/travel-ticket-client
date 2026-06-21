@@ -5,8 +5,7 @@ import { getBookedTickets } from "@/app/lib/api/getBookedTickets";
 
 const MyBookedTicketsPage = async() => {
     const bookings = await getBookedTickets()
-    console.log(bookings)
-    
+  
 
   const statusClass = {
      pending: "bg-yellow-100 text-yellow-700",
