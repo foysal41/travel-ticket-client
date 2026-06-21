@@ -2,10 +2,11 @@ import React from "react";
 import { Button, Card } from "@heroui/react";
 import Link from "next/link";
 import { getTickets } from "@/app/lib/api/gettickets";
+import Image from "next/image";
 
 const MyAddedTicketsTable = async () => {
   const tickets = await getTickets();
- 
+
   const statusClass = {
     pending: "bg-yellow-100 text-yellow-700",
     approved: "bg-green-100 text-green-700",
@@ -73,15 +74,17 @@ const MyAddedTicketsTable = async () => {
 
                 return (
                   <tr
-                    key={ticket.id}
+                    key={index}
                     className="border-t border-gray-200 text-sm text-gray-700"
                   >
                     <td className="px-4 py-4">{index + 1}</td>
 
                     <td className="px-4 py-4">
-                      <img
+                      <Image
                         src={ticket.image}
-                        alt={ticket.title}
+                        alt={ticket.title || "Ticket image"}
+                        width={128}
+                        height={80}
                         className="h-20 w-32 rounded-xl object-cover"
                       />
                     </td>
@@ -144,21 +147,21 @@ const MyAddedTicketsTable = async () => {
                     </td>
 
                     <td className="px-4 py-4">
-                      <div className="flex flex-col gap-2">
-                        <Button
-                          disabled={isRejected}
-                          className={`h-9 rounded-lg border text-sm ${
+                      <div className="flex items-center gap-2">
+                        <Link
+                          href={`/dashboard/vendor/my-tickets/edit-ticket/${ticket._id}`}
+                          className={`flex h-9 items-center justify-center rounded-lg border px-4 text-sm ${
                             isRejected
-                              ? "border-gray-200 bg-gray-100 text-gray-400"
+                              ? "pointer-events-none border-gray-200 bg-gray-100 text-gray-400"
                               : "border-blue-600 bg-white text-blue-600 hover:bg-blue-50"
                           }`}
                         >
                           Edit
-                        </Button>
+                        </Link>
 
                         <Button
                           disabled={isRejected}
-                          className={`h-9 rounded-lg border text-sm ${
+                          className={`h-9 rounded-lg border px-4 text-sm ${
                             isRejected
                               ? "border-gray-200 bg-gray-100 text-gray-400"
                               : "border-red-500 bg-white text-red-500 hover:bg-red-50"
