@@ -4,9 +4,7 @@ import { getTickets } from "@/app/lib/api/gettickets";
 import ManageTicketCard from "./ManageTicketCard";
 
 const ManageTicketsPage = async() => {
-    const tickets = await getTickets()
-    
-
+    const tickets = await getTickets()    
 
   return (
     <main className="min-h-screen px-4 py-8">

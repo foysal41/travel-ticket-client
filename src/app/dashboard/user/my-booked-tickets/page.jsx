@@ -9,10 +9,9 @@ const MyBookedTicketsPage = async() => {
     
 
   const statusClass = {
-    pending: "bg-yellow-100 text-yellow-700",
-    accepted: "bg-green-100 text-green-700",
+     pending: "bg-yellow-100 text-yellow-700",
+    approved: "bg-green-100 text-green-700",
     rejected: "bg-red-100 text-red-700",
-    paid: "bg-blue-100 text-blue-700",
   };
 
   return (
@@ -125,6 +124,9 @@ const MyBookedTicketsPage = async() => {
           Showing 1 to {bookings.length} of {bookings.length} booked tickets
         </p>
       </Card>
+
+
+      
     </main>
   );
 };

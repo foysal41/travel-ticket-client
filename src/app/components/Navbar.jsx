@@ -5,8 +5,10 @@ import Link from "next/link";
 import logo from "@/app/assets/logo-travel-ticket.png";
 import Image from "next/image";
 import { useSession, signOut } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { data: session, isPending } = useSession();
@@ -34,6 +36,7 @@ if (user) {
   const handleLogout = async() => {
     await signOut();
     router.push("/auth/signin")
+    router.refresh();
   };
 
   return (
