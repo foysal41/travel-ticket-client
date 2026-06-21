@@ -10,8 +10,7 @@ const approvedTickets = tickets.filter(
     (ticket) => ticket.verificationStatus === "approved"
   );
     
-  return (
-    
+  return ( 
 
     <AllTicketList tickets={approvedTickets}></AllTicketList>
   )

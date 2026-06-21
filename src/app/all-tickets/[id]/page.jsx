@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Button, Card } from "@heroui/react";
 import { getTickets } from "@/app/lib/api/gettickets";
 import CountdownTimer from "@/app/components/CountdownTimer";
+import BookNowModal from "@/app/components/BookNowModal";
 
 const TicketDetailsPage = async ({ params }) => {
   const { id } = await params;
@@ -184,9 +185,7 @@ const TicketDetailsPage = async ({ params }) => {
                 </span>
               </p>
 
-              <Button className="mt-5 h-12 w-full rounded-xl bg-blue-600 text-sm font-semibold text-white hover:bg-blue-700">
-                Book Now
-              </Button>
+             <BookNowModal ticket={myticket} />
             </div>
 
             <div className="mt-5 space-y-3 rounded-2xl border border-yellow-200 bg-yellow-50 p-4">
