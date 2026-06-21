@@ -18,12 +18,18 @@ const Navbar = () => {
     { label: "All Tickets", href: "/tickets" },
   ];
 
-  if (user) {
-    navLinks.push({
-      label: "Dashboard",
-      href: "/dashboard",
-    });
-  }
+  const dashboardLinks = {
+  admin: "/dashboard/admin",
+  vendor: "/dashboard/vendor",
+  user: "/dashboard/user",
+};
+
+if (user) {
+  navLinks.push({
+    label: "Dashboard",  
+    href: dashboardLinks[user.role] || "/dashboard/user",
+  });
+}
 
   const handleLogout = async() => {
     await signOut();

@@ -14,9 +14,16 @@ import {
 import { Button, Drawer } from "@heroui/react";
 import { ClipboardListIcon } from "lucide-react";
 import Link from "next/link";
+import { useSession } from "@/lib/auth-client";
+import LoadingSpinner from "./LoadingSpinner";
 
 export function DashboardSidebar() {
+  const {data:session, isPending } = useSession();
   const pathname = usePathname();
+
+  const role = session?.user?.role;
+  
+
   const navItems = [
     {
       icon: House,
@@ -48,9 +55,33 @@ export function DashboardSidebar() {
     { icon: Gear, href: "/dashboard/vendor/settings", label: "Settings" },
   ];
 
+
+
+  const adminLinks = [
+  { icon: House, label: "Dashboard", href: "/dashboard/admin" },
+  { icon: Ticket, label: "Manage Tickets", href: "/dashboard/admin/manage-tickets" },
+  { icon: Person, label: "Manage Users", href: "/dashboard/admin/manage-users" },
+  { icon: Calendar, label: "Advertise Tickets", href: "/dashboard/admin/advertise-tickets" },
+  { icon: Person, label: "Admin Profile", href: "/dashboard/admin/profile" },
+];
+
+  // ToDo: User Links will be create
+
+   let links = [];
+
+
+  if(role === "admin"){
+    links = adminLinks
+  }
+
+  if(role === "vendor"){
+    links = navItems
+  }
+ 
+
   const navContent = (
     <nav className="flex flex-col gap-3">
-      {navItems.map((item) => (
+      {links.map((item) => (
         <Link
           href={item.href}
           key={item.label}
@@ -68,6 +99,15 @@ export function DashboardSidebar() {
       ))}
     </nav>
   );
+
+
+  if(isPending){
+    return(
+      <aside className="w-64 border-r bg-white p-5">
+       <LoadingSpinner></LoadingSpinner>
+      </aside>
+    )
+  }
 
   return (
     <>
