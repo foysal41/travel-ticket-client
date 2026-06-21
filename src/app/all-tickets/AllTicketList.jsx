@@ -171,7 +171,7 @@ const AllTicketList = ({ tickets = [] }) => {
                 </p>
 
                 <Link
-                  href={`/tickets/${ticket._id}`}
+                  href={`/all-tickets/${ticket._id}`}
                   className="block rounded-xl bg-blue-600 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-blue-700"
                 >
                   See Details
