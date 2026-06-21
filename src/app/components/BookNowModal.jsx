@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import { Button } from "@heroui/react";
+import { bookedTicket } from "../lib/actions/bookedTicket";
+import { toast } from "react-toastify";
 
 const BookNowModal = ({ ticket }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,7 +21,7 @@ const BookNowModal = ({ ticket }) => {
 
   const isSoldOut = availableQuantity === 0;
 
-  const handleConfirmBooking = () => {
+  const handleConfirmBooking = async () => {
     if (isInvalidQuantity) return;
 
     const bookingData = {
@@ -38,7 +40,12 @@ const BookNowModal = ({ ticket }) => {
       departureDateTime: ticket.departureDateTime,
     };
 
-    console.log("Booking Data:", bookingData);
+    const res =  await bookedTicket(bookingData);
+    if(res.insertedId){
+      toast.success("Booking Request Sent!")
+    }
+
+    // console.log("Booking Data:", bookingData);
 
     setIsOpen(false);
   };

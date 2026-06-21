@@ -65,7 +65,12 @@ export function DashboardSidebar() {
   { icon: Person, label: "Admin Profile", href: "/dashboard/admin/profile" },
 ];
 
-  // ToDo: User Links will be create
+   const userLinks = [
+  { icon: Person, label: "Profile", href: "/dashboard/profile" },
+  { icon: Ticket, label: "My Booked Ticket", href: "/dashboard/user/my-booked-tickets" },
+  { icon: Calendar, label: "Transition History", href: "/dashboard/user/advertise-tickets" },
+
+];
 
    let links = [];
 
@@ -76,6 +81,9 @@ export function DashboardSidebar() {
 
   if(role === "vendor"){
     links = navItems
+  }
+  if(role === "user"){
+    links = userLinks
   }
  
 

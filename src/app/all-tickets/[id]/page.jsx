@@ -34,7 +34,7 @@ const TicketDetailsPage = async ({ params }) => {
                 alt={myticket?.title || "Ticket image"}
                 width={900}
                 height={450}
-                className="h-[360px] w-full object-cover"
+                className="h-90 w-full object-cover"
               />
             )}
 
