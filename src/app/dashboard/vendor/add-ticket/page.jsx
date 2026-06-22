@@ -84,6 +84,7 @@ const AddTicket = () => {
       ...ticket,
       image: logoUrl,
       verificationStatus: "pending",
+      ticketDisplayByAdmin: "NO"
     };
     const res = await createTicket(payload);
     if (res.insertedId) {
