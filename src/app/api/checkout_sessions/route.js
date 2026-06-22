@@ -22,8 +22,8 @@ export async function POST(req) {
         },
       ],
 
-      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/all-tickets/${bookingData.ticketId}`,
+      success_url: `${process.env.BETTER_AUTH_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.BETTER_AUTH_URL}/all-tickets/${bookingData.ticketId}`,
 
     //   metadata: {
     //     ticketId: bookingData.ticketId,
