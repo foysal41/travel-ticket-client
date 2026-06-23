@@ -6,6 +6,7 @@ import logo from "@/app/assets/logo-travel-ticket.png";
 import Image from "next/image";
 import { useSession, signOut } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { getUserSession } from "../lib/core/session";
 
 const Navbar = () => {
   const router = useRouter();
@@ -15,6 +16,7 @@ const Navbar = () => {
   const user = session?.user;
 
 
+ 
   const navLinks = [
     { label: "Home", href: "/" },
     { label: "All Tickets", href: "/all-tickets" },
@@ -39,6 +41,8 @@ if (user) {
     router.refresh();
   };
 
+
+  
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-white/90 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">

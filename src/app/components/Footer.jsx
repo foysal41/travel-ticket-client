@@ -14,7 +14,8 @@ const Footer = () => {
           </Link>
 
           <p className="mt-4 max-w-xs text-sm leading-6 text-slate-300">
-            Book bus, train, launch & flight tickets easily.
+            Book bus, train, launch & flight tickets easily.      
+            {}
           </p>
         </div>
 

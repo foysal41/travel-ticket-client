@@ -25,27 +25,27 @@ export async function POST(req) {
       success_url: `${process.env.BETTER_AUTH_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.BETTER_AUTH_URL}/all-tickets/${bookingData.ticketId}`,
 
-    //   metadata: {
-    //     ticketId: bookingData.ticketId,
-    //     ticketTitle: bookingData.ticketTitle,
-    //     ticketImage: bookingData.ticketImage,
-    //     from: bookingData.from,
-    //     to: bookingData.to,
-    //     transportType: bookingData.transportType,
-    //     unitPrice: String(bookingData.unitPrice),
-    //     bookingQuantity: String(bookingData.bookingQuantity),
-    //     totalPrice: String(bookingData.totalPrice),
-    //     vendorName: bookingData.vendorName,
-    //     vendorEmail: bookingData.vendorEmail,
-    //     departureDateTime: bookingData.departureDateTime,
-    //   },
+      //   metadata: {
+      //     ticketId: bookingData.ticketId,
+      //     ticketTitle: bookingData.ticketTitle,
+      //     ticketImage: bookingData.ticketImage,
+      //     from: bookingData.from,
+      //     to: bookingData.to,
+      //     transportType: bookingData.transportType,
+      //     unitPrice: String(bookingData.unitPrice),
+      //     bookingQuantity: String(bookingData.bookingQuantity),
+      //     totalPrice: String(bookingData.totalPrice),
+      //     vendorName: bookingData.vendorName,
+      //     vendorEmail: bookingData.vendorEmail,
+      //     departureDateTime: bookingData.departureDateTime,
+      //   },
     });
 
     return NextResponse.json({ url: session.url });
   } catch (err) {
     return NextResponse.json(
       { error: err.message },
-      { status: err.statusCode || 500 }
+      { status: err.statusCode || 500 },
     );
   }
 }
