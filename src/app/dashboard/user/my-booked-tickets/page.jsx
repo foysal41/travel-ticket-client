@@ -3,8 +3,10 @@ import { Button, Card } from "@heroui/react";
 import Image from "next/image";
 import { getBookedTickets } from "@/app/lib/api/getBookedTickets";
 
+
 const MyBookedTicketsPage = async() => {
     const bookings = await getBookedTickets()
+    
   
 
   const statusClass = {

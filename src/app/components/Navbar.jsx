@@ -6,7 +6,7 @@ import logo from "@/app/assets/logo-travel-ticket.png";
 import Image from "next/image";
 import { useSession, signOut } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
-import { getUserSession } from "../lib/core/session";
+
 
 const Navbar = () => {
   const router = useRouter();

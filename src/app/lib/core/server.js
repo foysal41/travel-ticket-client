@@ -16,17 +16,3 @@ export const serverMutation = async(path, data) => {
 
 
 
-
-// export const serverMutation = async (path,data) => {
-//     const res = await fetch(`${baseUrl}${path}`, {
-//         method:'POST',
-//         headers:{
-//             'Content-Type': 'application/json',
-//             ...await authHeader()
-//         },
-//         body:JSON.stringify(data)
-
-       
-//     })
-//      return res.json();
-// }

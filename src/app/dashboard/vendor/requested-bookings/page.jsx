@@ -15,6 +15,8 @@ const RequestedBookingPage = async() => {
           Review the Ticket by  vendor submitted tickets and approve or reject them.
         </p>
       </div>
+
+    
        
        <RequestedBookingCard BookedTickets={BookedTickets} ></RequestedBookingCard>
      
