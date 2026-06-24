@@ -42,11 +42,7 @@ export function DashboardSidebar() {
       href: "/dashboard/vendor/requested-bookings",
       label: "Requested Bookings",
     },
-    {
-      icon: ChartColumn,
-      href: "/dashboard/vendor/earnings",
-      label: "Earnings",
-    },
+
     {
       icon: Person,
       href: "/dashboard/vendor/vendor-profile",

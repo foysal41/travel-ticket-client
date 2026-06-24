@@ -10,14 +10,16 @@ const AllTicketList = ({ tickets = [] }) => {
   const [to, setTo] = useState("");
   const [transport, setTransport] = useState("");
   const [sortBy, setSortBy] = useState("");
+  const [currentPage, setCurrentPage] = useState(1); // বর্তমানে user কোন page এ আছে সেটা track করবে
 
+  const ticketsPerPage = 4;
 
   // useMemo ব্যবহার করছি যাতে filter/sort calculation unnecessary বারবার না হয়
-// tickets/from/to/transport/sortBy change হলেই শুধু নতুন করে calculation হবে
+  // tickets/from/to/transport/sortBy change হলেই শুধু নতুন করে calculation হবে
   const filteredTickets = useMemo(() => {
     let result = [...tickets];
 
-      // user input দিলে ticket.from এর সাথে মিল আছে কিনা check করছি
+    // user input দিলে ticket.from এর সাথে মিল আছে কিনা check করছি
     if (from) {
       result = result.filter((ticket) =>
         ticket.from?.toLowerCase().includes(from.toLowerCase())
@@ -30,14 +32,12 @@ const AllTicketList = ({ tickets = [] }) => {
       );
     }
 
-     // bus/train/launch/plane select করলে শুধু ওই type এর ticket দেখাবে
+    // bus/train/launch/plane select করলে শুধু ওই type এর ticket দেখাবে
     if (transport) {
-      result = result.filter(
-        (ticket) => ticket.transportType === transport
-      );
+      result = result.filter((ticket) => ticket.transportType === transport);
     }
 
-      // কম দাম থেকে বেশি দাম অনুযায়ী সাজাবে
+    // কম দাম থেকে বেশি দাম অনুযায়ী সাজাবে
     if (sortBy === "price-low-high") {
       result.sort((a, b) => Number(a.price) - Number(b.price));
     }
@@ -51,16 +51,28 @@ const AllTicketList = ({ tickets = [] }) => {
       result.sort((a, b) => Number(b.quantity) - Number(a.quantity));
     }
 
-      // departure date/time অনুযায়ী latest ticket আগে দেখাবে
+    // departure date/time অনুযায়ী latest ticket আগে দেখাবে
     if (sortBy === "latest") {
       result.sort(
         (a, b) => new Date(b.departureDateTime) - new Date(a.departureDateTime)
       );
     }
 
-      // সব filter/sort করার পর final result return করছি
+    // সব filter/sort করার পর final result return করছি
     return result;
   }, [tickets, from, to, transport, sortBy]);
+
+  // total কয়টা page হবে সেটা calculate করছি
+  const totalPages = Math.ceil(filteredTickets.length / ticketsPerPage);
+
+  // current page অনুযায়ী কোন index থেকে ticket show হবে
+  const startIndex = (currentPage - 1) * ticketsPerPage;
+
+  // current page অনুযায়ী কোন index পর্যন্ত ticket show হবে
+  const endIndex = startIndex + ticketsPerPage;
+
+  // filteredTickets থেকে শুধু current page এর tickets বের করছি
+  const paginatedTickets = filteredTickets.slice(startIndex, endIndex);
 
   return (
     <section className="px-4 py-10">
@@ -78,7 +90,10 @@ const AllTicketList = ({ tickets = [] }) => {
             type="text"
             placeholder="From location"
             value={from}
-            onChange={(e) => setFrom(e.target.value)}
+            onChange={(e) => {
+              setFrom(e.target.value);
+              setCurrentPage(1);
+            }}
             className="h-12 rounded-xl border px-4 text-sm outline-none focus:border-blue-500"
           />
 
@@ -86,13 +101,19 @@ const AllTicketList = ({ tickets = [] }) => {
             type="text"
             placeholder="To location"
             value={to}
-            onChange={(e) => setTo(e.target.value)}
+            onChange={(e) => {
+              setTo(e.target.value);
+              setCurrentPage(1);
+            }}
             className="h-12 rounded-xl border px-4 text-sm outline-none focus:border-blue-500"
           />
 
           <select
             value={transport}
-            onChange={(e) => setTransport(e.target.value)}
+            onChange={(e) => {
+              setTransport(e.target.value);
+              setCurrentPage(1);
+            }}
             className="h-12 rounded-xl border px-4 text-sm outline-none focus:border-blue-500"
           >
             <option value="">All Transport</option>
@@ -104,7 +125,10 @@ const AllTicketList = ({ tickets = [] }) => {
 
           <select
             value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
+            onChange={(e) => {
+              setSortBy(e.target.value);
+              setCurrentPage(1);
+            }}
             className="h-12 rounded-xl border px-4 text-sm outline-none focus:border-blue-500"
           >
             <option value="">Sort By</option>
@@ -116,12 +140,12 @@ const AllTicketList = ({ tickets = [] }) => {
         </div>
 
         <div className="mb-5 text-sm text-gray-500">
-          Showing {filteredTickets.length} tickets
+          Showing {paginatedTickets.length} of {filteredTickets.length} tickets
         </div>
 
         {/* Tickets Grid */}
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {filteredTickets.map((ticket) => (
+          {paginatedTickets.map((ticket) => (
             <div
               key={ticket._id}
               className="overflow-hidden rounded-2xl border bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
@@ -182,9 +206,45 @@ const AllTicketList = ({ tickets = [] }) => {
         </div>
 
         {filteredTickets.length === 0 && (
-          <p className="mt-10 text-center text-gray-500">
-            No tickets found.
-          </p>
+          <p className="mt-10 text-center text-gray-500">No tickets found.</p>
+        )}
+
+        {filteredTickets.length > 0 && totalPages > 1 && (
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
+            <button
+              onClick={() => setCurrentPage((prev) => prev - 1)}
+              disabled={currentPage === 1}
+              className="rounded-lg border px-4 py-2 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Previous
+            </button>
+
+            {Array.from({ length: totalPages }, (_, index) => {
+              const pageNumber = index + 1;
+
+              return (
+                <button
+                  key={pageNumber}
+                  onClick={() => setCurrentPage(pageNumber)}
+                  className={`rounded-lg border px-4 py-2 text-sm font-semibold ${
+                    currentPage === pageNumber
+                      ? "bg-blue-600 text-white"
+                      : "bg-white text-gray-700"
+                  }`}
+                >
+                  {pageNumber}
+                </button>
+              );
+            })}
+
+            <button
+              onClick={() => setCurrentPage((prev) => prev + 1)}
+              disabled={currentPage === totalPages}
+              className="rounded-lg border px-4 py-2 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
         )}
       </div>
     </section>

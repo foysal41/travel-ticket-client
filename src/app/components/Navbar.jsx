@@ -14,7 +14,7 @@ const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { data: session, isPending } = useSession();
   const user = session?.user;
-
+  
 
  
   const navLinks = [

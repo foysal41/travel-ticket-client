@@ -1,13 +1,17 @@
 "use client";
 
+import { useSession } from "@/lib/auth-client";
 import { useEffect, useState } from "react";
 
 export default function TransitionHistoryPage() {
   const [data, setData] = useState(null);
+ const {data:session, isPending} = useSession()
+ const userEmail = session?.user.email;
+ 
 
   useEffect(() => {
     const loadRevenue = async () => {
-      const userEmail = "foysal.user@gmail.com";
+      
 
       const res = await fetch(
         `/api/user/stripe-payments?email=${userEmail}`
